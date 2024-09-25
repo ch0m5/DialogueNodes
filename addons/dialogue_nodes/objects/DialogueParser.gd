@@ -111,7 +111,8 @@ func _proceed(node_name : String):
 		_process_signal,
 		_process_set,
 		_process_condition,
-		_process_fork
+		_process_fork,
+		_process_player_fork
 	]
 	
 	var id := int(node_name.split('_')[0])
@@ -217,6 +218,11 @@ func _process_fork(dict : Dictionary):
 			result = options[i].link
 			break
 	_proceed(result)
+
+
+# Process the player fork node data (dict).
+func _process_player_fork(dict : Dictionary):
+	return
 
 
 # Checks the fork conditions based on each's option's condition, in order
