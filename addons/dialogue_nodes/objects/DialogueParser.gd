@@ -225,15 +225,6 @@ func _process_player_fork(dict : Dictionary):
 	return
 
 
-# Checks the fork conditions based on each's option's condition, in order
-func _check_fork(dict : Dictionary):
-	var options = dict.options
-	for i in range(0, dict.options.size()):  # Index traversal to ensure they're checked in order.
-		if options[i].condition.is_empty() or _check_condition(options[i].condition):
-			return options[i].link
-	return dict.default_option.link
-
-
 # Checks the condition based on dict.value1, dict.value2 and dict.operator
 func _check_condition(dict : Dictionary):
 	var value1 = dict.value1
