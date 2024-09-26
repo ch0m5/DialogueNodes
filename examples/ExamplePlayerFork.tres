@@ -144,7 +144,7 @@ Player to affect dialogue through choice, usually \"answering\".",
 "link": &"6_1",
 "text": "Uhh, neither please."
 },
-"offset": Vector2(-220, 160),
+"offset": Vector2(-160, 160),
 "options": {
 0: {
 "condition": {},
@@ -157,7 +157,7 @@ Player to affect dialogue through choice, usually \"answering\".",
 "text": "So listen up here's a story, about a little guy in a blue world. An all day and all night..."
 }
 },
-"size": Vector2(380, 235),
+"size": Vector2(400, 235),
 "title": "Title Example :D"
 }
 }
