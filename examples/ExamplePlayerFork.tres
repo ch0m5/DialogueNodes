@@ -157,6 +157,7 @@ Player to affect dialogue through choice, usually \"answering\".",
 "text": "So listen up here's a story, about a little guy in a blue world. An all day and all night..."
 }
 },
+"size": Vector2(380, 235),
 "title": "Title Example :D"
 }
 }

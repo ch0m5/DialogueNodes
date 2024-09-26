@@ -30,7 +30,7 @@ var option_height: int = 0
 @onready var first_option_index: int = %PlayerForkOption1.get_index()
 @onready var default_option: BoxContainer = %DefaultPlayerForkOption
 
-@onready var OptionScene := preload("res://addons/dialogue_nodes/nodes/sub_nodes/forkOption.tscn")
+@onready var OptionScene := preload("res://addons/dialogue_nodes/nodes/sub_nodes/playerForkOption.tscn")
 
 
 func _ready():
@@ -42,7 +42,8 @@ func _ready():
 func _to_dict(graph : GraphEdit):
 	var dict = {}
 	
-	# get title
+	# get general data
+	dict['size'] = size
 	dict['title'] = title_label.text
 	
 	# get options connected to other nodes (including separate default option)
@@ -86,6 +87,10 @@ func _to_dict(graph : GraphEdit):
 func _from_dict(dict : Dictionary):
 	var next_nodes = []
 	
+	# set size
+	size = dict['size']
+	last_size = size
+
 	# set title
 	title_label.text = dict['title']
 	prev_title_text = title_label.text
@@ -117,9 +122,6 @@ func _from_dict(dict : Dictionary):
 	
 	update_slots()
 	
-	# set size of node (few frames are needed to let UI set up itself and deferred doesn't work)
-	create_tween().tween_callback(reset_size).set_delay(0.1)
-	
 	return next_nodes
 
 
@@ -127,9 +129,8 @@ func instantiate_option() -> BoxContainer:
 	var option : BoxContainer = null
 	if OptionScene.can_instantiate():
 		option = OptionScene.instantiate()
-		option.toggle_expand_to_text(true)
 	else:
-		printerr("Cannot instantiate OptionScene!")
+		printerr("Cannot instantiate PlayerOptionScene!")
 	return option
 
 
@@ -160,6 +161,8 @@ func add_option(option : BoxContainer, to_idx := -1):
 	# if more than the empty option exists, shift the default option also
 	if options_count > 1:
 		connection_shift_request.emit(name, options_count - 2, options_count - 1)
+	
+	reset_height()
 
 
 func remove_option(option : BoxContainer):
@@ -179,6 +182,12 @@ func remove_option(option : BoxContainer):
 	option.focus_exited.disconnect(_on_option_focus_exited.bind(option))
 	
 	if option.get_parent() == self: remove_child(option)
+	
+	reset_height()
+
+
+func reset_height():
+	size.y = 0
 
 
 func update_slots():
@@ -276,6 +285,8 @@ func _on_option_text_changed(new_text : String, option : BoxContainer):
 	undo_redo.add_undo_method(option, 'set_text', option.text)
 	undo_redo.add_undo_method(self, 'update_slots')
 	undo_redo.commit_action()
+	
+	reset_height()
 
 
 func _on_default_option_text_changed(new_text : String):
@@ -287,6 +298,8 @@ func _on_default_option_text_changed(new_text : String):
 	undo_redo.add_undo_method(default_option, 'set_text', default_option.text)
 	undo_redo.add_undo_method(self, 'update_slots')
 	undo_redo.commit_action()
+	
+	reset_height()
 
 
 func _on_option_focus_exited(option : BoxContainer):
