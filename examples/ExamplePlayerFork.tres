@@ -52,34 +52,6 @@ nodes = {
 "size": Vector2(300, 256),
 "speaker": "Morpheus"
 },
-"1_4": {
-"dialogue": "",
-"offset": Vector2(-260, 420),
-"options": {
-0: {
-"condition": {},
-"link": "END",
-"text": "sda"
-},
-1: {
-"condition": {},
-"link": "END",
-"text": "asd"
-},
-2: {
-"condition": {},
-"link": "END",
-"text": "sda"
-},
-3: {
-"condition": {},
-"link": "END",
-"text": "asd"
-}
-},
-"size": Vector2(300, 289),
-"speaker": ""
-},
 "1_6": {
 "dialogue": "So. Do you feel like a little guy in a blue world? All day and all night and everything you'll see will be blue, like you, inside and outside.",
 "offset": Vector2(1460, 220),
@@ -169,7 +141,8 @@ Player to affect dialogue through choice, usually \"answering\".",
 },
 "7_1": {
 "default_option": {
-"link": &"6_1"
+"link": &"6_1",
+"text": "Uhh, neither please."
 },
 "offset": Vector2(-220, 160),
 "options": {
@@ -197,5 +170,5 @@ variables = {
 "value": false
 }
 }
-strays = Array[String](["2_1", "1_4"])
+strays = Array[String](["2_1"])
 characters = ""

@@ -57,13 +57,8 @@ func _to_dict(graph : GraphEdit):
 			options_dict[idx]['condition'] = (
 				options[idx].get_condition() if options[idx].text != '' else {}
 			)
-			if options_dict[idx]['condition'] == {}:
-				push_warning(
-					"Option #%d <%s> in Fork <%s> has no conditions. Options below it will never be reached!"
-					% [idx + 1, options[idx].text, name]
-				)
 		else:  # We assume that a connection of idx >= to options.size() is the default option
-			dict['default_option'] = { 'link': connection['to_node'] }
+			dict['default_option'] = { 'text': default_option.text, 'link': connection['to_node'] }
 	
 	# get options not connected (including separate default option)
 	for i in options.size():
@@ -73,7 +68,7 @@ func _to_dict(graph : GraphEdit):
 			options_dict[i]['link'] = 'END'
 			options_dict[i]['condition'] = options[i].get_condition()
 	if !dict.has('default_option'):
-		dict['default_option'] = { 'link': 'END' }
+		dict['default_option'] = { 'text': default_option.text, 'link': 'END' }
 	
 	# if no options where registered (aside from default), record a single empty option
 	if options_dict.is_empty():
@@ -116,8 +111,10 @@ func _from_dict(dict : Dictionary):
 		var new_option := instantiate_option()
 		add_option(new_option)
 	
-	# add default option link
+	# add default option
+	default_option.set_text(dict['default_option']['text'])
 	next_nodes.append(dict['default_option']['link'])
+	
 	update_slots()
 	
 	# set size of node (few frames are needed to let UI set up itself and deferred doesn't work)
@@ -277,6 +274,17 @@ func _on_option_text_changed(new_text : String, option : BoxContainer):
 	undo_redo.add_do_method(self, '_on_modified')
 	undo_redo.add_undo_method(self, '_on_modified')
 	undo_redo.add_undo_method(option, 'set_text', option.text)
+	undo_redo.add_undo_method(self, 'update_slots')
+	undo_redo.commit_action()
+
+
+func _on_default_option_text_changed(new_text : String):
+	undo_redo.create_action('Set default option text')
+	undo_redo.add_do_method(default_option, 'set_text', new_text)
+	undo_redo.add_do_reference(default_option)
+	undo_redo.add_do_method(self, '_on_modified')
+	undo_redo.add_undo_method(self, '_on_modified')
+	undo_redo.add_undo_method(default_option, 'set_text', default_option.text)
 	undo_redo.add_undo_method(self, 'update_slots')
 	undo_redo.commit_action()
 

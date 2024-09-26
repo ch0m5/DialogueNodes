@@ -4,6 +4,8 @@ extends HBoxContainer
 signal modified
 signal text_changed(new_text : String)
 
+@export var conditions_active: bool = true
+
 @onready var text_edit = $TextEdit
 @onready var filter_button = $FilterButton
 @onready var filter_panel = $FilterPanel
@@ -44,7 +46,7 @@ func get_condition():
 func set_text(new_text : String):
 	if text_edit.text != new_text:
 		text_edit.text = new_text
-		filter_button.visible = new_text != ''
+		filter_button.visible = conditions_active and new_text != ''
 	text = new_text
 
 
@@ -81,7 +83,7 @@ func _on_filter_button_pressed():
 
 
 func _on_text_changed():
-	filter_button.visible = text_edit.text != ''
+	filter_button.visible = conditions_active and text_edit.text != ''
 	text_changed.emit(text_edit.text)
 
 
